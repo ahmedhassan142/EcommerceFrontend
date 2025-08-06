@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
@@ -16,8 +17,8 @@ const nextConfig: NextConfig = {
     domains: ["res.cloudinary.com"], // Add your domain here
   },
   experimental:{
-    optimizeCss: false ,
-    esmExternals: 'loose'
+    optimizeCss: false 
+    
     
   },
   distDir: '.next',

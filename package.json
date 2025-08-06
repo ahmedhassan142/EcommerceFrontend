@@ -2,6 +2,14 @@
   "name": "frontend",
   "version": "1.0.0",
   "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "homepage": "https://github.com/ahmedhassan142/EcommerceFrontend#readme",
+  "bugs": {
+    "url": "https://github.com/ahmedhassan142/EcommerceFrontend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmedhassan142/EcommerceFrontend.git"
+  },
   "license": "ISC",
   "author": "",
   "type": "commonjs",
@@ -13,9 +21,6 @@
     "lint": "next lint",
     "clean": "Remove-Item -Recurse -Force .next, node_modules, package-lock.json -ErrorAction SilentlyContinue && npm cache clean --force",
     "reset": "npm run clean && npm install && npm install react@latest react-dom@latest"
-  },
-  "resolutions": {
-    "lightningcss": "latest"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -282,8 +287,8 @@
     "queue-microtask": "^1.2.3",
     "range-parser": "^1.2.1",
     "raw-body": "^2.5.2",
-     "react": "^18.2.0",
-  "react-dom": "^18.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.56.1",
     "react-hot-toast": "^2.5.2",
@@ -378,7 +383,7 @@
     "word-wrap": "^1.2.5",
     "yocto-queue": "^0.1.0",
     "zod": "^3.24.2",
-      "@react-spring/web": "^9.7.5",
+    "@react-spring/web": "^9.7.5",
     "@react-spring/core": "^9.7.5",
     "@react-spring/shared": "^9.7.5"
   },
@@ -390,6 +395,6 @@
     "lightningcss": "^1.29.3",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.4"
-    
   }
+
 }
