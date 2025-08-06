@@ -16,7 +16,8 @@ const nextConfig: NextConfig = {
     domains: ["res.cloudinary.com"], // Add your domain here
   },
   experimental:{
-    optimizeCss: false 
+    optimizeCss: false ,
+    esmExternals: 'loose'
     
   },
   distDir: '.next',
