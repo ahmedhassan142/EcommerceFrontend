@@ -49,7 +49,7 @@ const CategoryPage = () => {
       try {
         // Fetch category details
         const categoryResponse = await axios.get(
-          `http://localhost:3002/api/Category/slug/${categorySlug}`
+          `${process.env.PRODUCT_SERVICE_URL}/api/Category/slug/${categorySlug}`
         );
         
         if (!categoryResponse.data.success) {
@@ -60,7 +60,7 @@ const CategoryPage = () => {
 
         // Fetch products
         const productsResponse = await axios.get(
-          `http://localhost:3002/api/products/categories/${categorySlug}/products`
+          `${process.env.PRODUCT_SERVICE_URL}/api/products/categories/${categorySlug}/products`
         );
         
         if (!productsResponse.data.success) {

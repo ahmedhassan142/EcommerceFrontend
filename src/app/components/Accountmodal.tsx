@@ -1,5 +1,5 @@
 "use client";
-import { FiX, FiUser, FiMail, FiCalendar, FiEdit } from 'react-icons/fi';
+import { FiX, FiUser, FiMail, FiCalendar, FiEdit, } from 'react-icons/fi';
 import { useProfile } from '@/app/context/profileContext';
 
 export default function MyAccountModal({ onClose }: { onClose: () => void }) {

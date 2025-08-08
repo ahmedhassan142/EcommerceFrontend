@@ -113,7 +113,7 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ onSubmit, onSuccess }) => {
 
   const handleSubmit = async (data: ShippingFormValues) => {
     try {
-      const response = await axios.post('http://localhost:3005/api/shipping/post', data);
+      const response = await axios.post(`${process.env.SHIPPING_SERVICE_URL}/api/shipping/post`, data);
       onSubmit(response.data);
       onSuccess();
     } catch (error) {
