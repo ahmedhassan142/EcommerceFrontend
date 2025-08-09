@@ -347,42 +347,55 @@ const Navbar = () => {
                 {/* Suggestions dropdown */}
                 {(suggestions.products.length > 0 || suggestions.categories.length > 0) && (
                   <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-96 overflow-y-auto divide-y divide-gray-700">
-                    {suggestions.categories.length > 0 && (
-                      <div className="py-1">
-                        <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Categories</div>
-                        {suggestions.categories.map((category) => (
-                          <div
-                            key={`cat-${category.slug}`}
-                            className="px-3 py-2 hover:bg-gray-700 cursor-pointer text-white"
-                            onClick={() => handleSuggestionClick('category', category.slug)}
-                          >
-                            {category.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    
                     {suggestions.products.length > 0 && (
-                      <div className="py-1">
-                        <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Products</div>
-                        {suggestions.products.map((product) => (
-                          <div
-                            key={`prod-${product.slug}`}
-                            className="px-3 py-2 hover:bg-gray-700 cursor-pointer flex items-center text-white"
-                            onClick={() => handleSuggestionClick('Product', product.slug)}
-                          >
-                            {product.imageUrl && (
-                              <img 
-                                src={product.imageUrl} 
-                                alt="" 
-                                className="w-8 h-8 object-cover mr-2 rounded" 
-                              />
-                            )}
-                            <span>{product.name}</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+  <div className="py-1">
+    <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Products</div>
+    {suggestions.products.map((product) => (
+      <Link
+        key={`prod-${product.slug}`}
+        href={`/Product/${product.slug}`}
+        className="px-3 py-2 hover:bg-gray-700 cursor-pointer flex items-center text-white"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowSearch(false);
+          setSearchQuery("");
+          router.push(`/Product/${product.slug}`);
+        }}
+      >
+        {product.imageUrl && (
+          <img 
+            src={product.imageUrl} 
+            alt="" 
+            className="w-8 h-8 object-cover mr-2 rounded" 
+          />
+        )}
+        <span>{product.name}</span>
+      </Link>
+    ))}
+  </div>
+)}
+
+// And for categories:
+{suggestions.categories.length > 0 && (
+  <div className="py-1">
+    <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Categories</div>
+    {suggestions.categories.map((category) => (
+      <Link
+        key={`cat-${category.slug}`}
+        href={`/Category/${category.slug}`}
+        className="px-3 py-2 hover:bg-gray-700 cursor-pointer text-white"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowSearch(false);
+          setSearchQuery("");
+          router.push(`/Category/${category.slug}`);
+        }}
+      >
+        {category.name}
+      </Link>
+    ))}
+  </div>
+)}
                   </div>
                 )}
               </form>

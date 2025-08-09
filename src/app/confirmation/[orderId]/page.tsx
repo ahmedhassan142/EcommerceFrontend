@@ -39,7 +39,7 @@ const OrderConfirmation = ({ params }: { params: { orderId: string } }) => {
     if (orderId) {
       const fetchOrder = async () => {
         try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_ORDER_SERVICE_URL}/api/order/${orderId}`);
+          const response = await axios.get(`${process.env.ORDER_SERVICE_URL}/api/order/${orderId}`);
           if (response.data.success) {
             setOrder(response.data.order);
           } else {
