@@ -175,17 +175,17 @@ const Navbar = () => {
   if (error) return <div className="navbar p-4 text-red-500">{error}</div>;
 
   return (
-    <nav className="navbar bg-white shadow-sm sticky top-0 z-50">
+    <nav className="navbar bg-black shadow-sm sticky top-0 z-50">
       {/* Mobile Search Bar - appears below navbar when active */}
       {showSearch && (
-        <div className="md:hidden w-full bg-white p-4 border-t border-gray-200">
+        <div className="md:hidden w-full bg-black p-4 border-t border-gray-700 relative" ref={searchRef}>
           <form onSubmit={handleSearch} className="relative w-full">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              className="w-full px-4 py-3 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800"
               autoFocus
             />
             <button
@@ -194,41 +194,94 @@ const Navbar = () => {
                 setShowSearch(false);
                 setSearchQuery("");
               }}
-              className="absolute right-12 top-3.5 text-gray-500 hover:text-gray-700"
+              className="absolute right-12 top-3.5 text-gray-300 hover:text-white"
             >
               <FiX size={20} />
             </button>
             <button
               type="submit"
-              className="absolute right-3 top-3 text-blue-500"
+              className="absolute right-3 top-3 text-blue-400"
             >
               <FiSearch size={20} />
             </button>
+            {/* Mobile Suggestions dropdown */}
+            {(suggestions.products.length > 0 || suggestions.categories.length > 0) && (
+              <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-96 overflow-y-auto divide-y divide-gray-700">
+                {suggestions.categories.length > 0 && (
+                  <div className="py-1">
+                    <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Categories</div>
+                    {suggestions.categories.map((category) => (
+                      <div
+                        key={`cat-${category.slug}`}
+                        className="px-3 py-2 hover:bg-gray-700 cursor-pointer text-white"
+                        onClick={() => handleSuggestionClick('category', category.slug)}
+                      >
+                        {category.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {suggestions.products.length > 0 && (
+                  <div className="py-1">
+                    <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Products</div>
+                    {suggestions.products.map((product) => (
+                      <div
+                        key={`prod-${product.slug}`}
+                        className="px-3 py-2 hover:bg-gray-700 cursor-pointer flex items-center text-white"
+                        onClick={() => handleSuggestionClick('Product', product.slug)}
+                      >
+                        {product.imageUrl && (
+                          <img 
+                            src={product.imageUrl} 
+                            alt="" 
+                            className="w-8 h-8 object-cover mr-2 rounded" 
+                          />
+                        )}
+                        <span>{product.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </form>
         </div>
       )}
 
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-black">
-          SHOPPING WEBSITE
-        </Link>
+        {/* Logo and Home Link */}
+        <div className="flex items-center space-x-6">
+          <Link href="/" className="text-xl font-bold text-white">
+            SHOPPING WEBSITE
+          </Link>
+          <Link href="/" className="text-md text-white hidden md:block">
+            <FiHome className="h-5 w-5" />
+          </Link>
+        </div>
 
-        {/* Mobile Menu Toggle */}
+        {/* Mobile Menu Toggle and Icons */}
         <div className="flex items-center md:hidden space-x-4">
           <button 
-            className="p-2"
+            className="p-2 text-white"
+            onClick={() => setShowAccountDropdown(!showAccountDropdown)}
+            aria-label="Account menu"
+          >
+            <FiUser className="h-6 w-6" />
+          </button>
+          <button 
+            className="p-2 text-white"
             onClick={() => setShowSearch(!showSearch)}
             aria-label="Search"
           >
-            <FiSearch className="h-6 w-6 text-black" />
+            <FiSearch className="h-6 w-6" />
           </button>
           <button 
-            className="p-2"
+            className="p-2 text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
-            <FiMenu className="h-6 w-6 text-black" />
+            <FiMenu className="h-6 w-6" />
           </button>
         </div>
 
@@ -238,18 +291,18 @@ const Navbar = () => {
             <div key={category._id} className="dropdown group relative">
               <Link 
                 href={`/Category/${category.slug}`} 
-                className="nav-link px-3 py-2 text-black hover:text-blue-600"
+                className="nav-link px-3 py-2 text-white hover:text-blue-400"
               >
                 {category.name}
               </Link>
               
               {category.subcategories && category.subcategories.length > 0 && (
-                <div className="dropdown-content absolute left-0 mt-1 hidden group-hover:block bg-white shadow-lg rounded-md z-10 min-w-[200px]">
+                <div className="dropdown-content absolute left-0 mt-1 hidden group-hover:block bg-gray-800 shadow-lg rounded-md z-10 min-w-[200px]">
                   {category.subcategories.map((subcategory) => (
                     <Link
                       key={subcategory._id}
                       href={`/Category/${subcategory.slug}`}
-                      className="dropdown-link block px-4 py-2 hover:bg-gray-100 whitespace-nowrap text-gray-800"
+                      className="dropdown-link block px-4 py-2 hover:bg-gray-700 whitespace-nowrap text-white"
                     >
                       {subcategory.name}
                     </Link>
@@ -260,7 +313,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Right side elements */}
+        {/* Right side elements (Desktop) */}
         <div className="hidden md:flex items-center space-x-4">
           {/* Desktop Search Bar */}
           <div className="relative" ref={searchRef}>
@@ -271,7 +324,7 @@ const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+                  className="w-64 px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white bg-gray-800"
                   autoFocus
                 />
                 <button
@@ -280,27 +333,27 @@ const Navbar = () => {
                     setShowSearch(false);
                     setSearchQuery("");
                   }}
-                  className="absolute right-10 top-2.5 text-gray-500 hover:text-gray-700"
+                  className="absolute right-10 top-2.5 text-gray-300 hover:text-white"
                 >
                   <FiX size={18} />
                 </button>
                 <button
                   type="submit"
-                  className="absolute right-2 top-2 text-blue-500"
+                  className="absolute right-2 top-2 text-blue-400"
                 >
                   <FiSearch size={18} />
                 </button>
 
                 {/* Suggestions dropdown */}
                 {(suggestions.products.length > 0 || suggestions.categories.length > 0) && (
-                  <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto divide-y divide-gray-100">
+                  <div className="absolute z-50 w-full mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg max-h-96 overflow-y-auto divide-y divide-gray-700">
                     {suggestions.categories.length > 0 && (
                       <div className="py-1">
-                        <div className="px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">Categories</div>
+                        <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Categories</div>
                         {suggestions.categories.map((category) => (
                           <div
                             key={`cat-${category.slug}`}
-                            className="px-3 py-2 hover:bg-gray-50 cursor-pointer text-gray-800"
+                            className="px-3 py-2 hover:bg-gray-700 cursor-pointer text-white"
                             onClick={() => handleSuggestionClick('category', category.slug)}
                           >
                             {category.name}
@@ -311,11 +364,11 @@ const Navbar = () => {
                     
                     {suggestions.products.length > 0 && (
                       <div className="py-1">
-                        <div className="px-3 py-2 text-xs font-semibold text-gray-500 bg-gray-50">Products</div>
+                        <div className="px-3 py-2 text-xs font-semibold text-gray-400 bg-gray-900">Products</div>
                         {suggestions.products.map((product) => (
                           <div
                             key={`prod-${product.slug}`}
-                            className="px-3 py-2 hover:bg-gray-50 cursor-pointer flex items-center text-black"
+                            className="px-3 py-2 hover:bg-gray-700 cursor-pointer flex items-center text-white"
                             onClick={() => handleSuggestionClick('Product', product.slug)}
                           >
                             {product.imageUrl && (
@@ -338,7 +391,7 @@ const Navbar = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowSearch(true)}
-                className="hover:bg-gray-100 text-black"
+                className="hover:bg-gray-800 text-white"
               >
                 <FiSearch className="h-5 w-5" />
               </Button>
@@ -349,24 +402,24 @@ const Navbar = () => {
           <div className="relative" ref={accountRef}>
             <button
               onClick={() => setShowAccountDropdown(!showAccountDropdown)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors text-black"
+              className="p-2 hover:bg-gray-800 rounded-full transition-colors text-white"
               aria-label="Account menu"
             >
               <FiUser className="h-5 w-5" />
             </button>
             
             {showAccountDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-100">
+              <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg py-1 z-20 border border-gray-700">
                 {isAuthenticated ? (
                   <>
-                    <div className="px-4 py-2 text-sm font-medium text-gray-700 border-b">
+                    <div className="px-4 py-2 text-sm font-medium text-white border-b border-gray-700">
                       Hi, {userDetails?.firstName || 'User'}
                     </div>
                     <button
                       onClick={() => {
                         setShowAccountModal(true);
                       }}
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700 transition-colors w-full text-left"
                     >
                       <FiUser className="h-4 w-4 mr-2" />
                       My Account
@@ -375,21 +428,21 @@ const Navbar = () => {
                       onClick={() => {
                         setShowOrdersModal(true);
                       }}
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700 transition-colors w-full text-left"
                     >
                       <FiPackage className="h-4 w-4 mr-2" />
                       My Orders
                     </button>
                     <button
                       onClick={() => setShowSettingsModal(true)}
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700 transition-colors w-full text-left"
                     >
                       <FiSettings className="h-4 w-4 mr-2" />
                       Settings
                     </button>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      className="w-full text-left flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700 transition-colors"
                     >
                       <FiLogOut className="h-4 w-4 mr-2" />
                       Sign Out
@@ -399,21 +452,21 @@ const Navbar = () => {
                   <>
                     <button
                       onClick={() => openAuthModal("login")}
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700 transition-colors w-full text-left"
                     >
                       <FiLogIn className="h-4 w-4 mr-2" />
                       Login
                     </button>
                     <button
                       onClick={() => openAuthModal("signup")}
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700 transition-colors w-full text-left"
                     >
                       <FiUserPlus className="h-4 w-4 mr-2" />
                       Sign Up
                     </button>
                     <Link
                       href="/help"
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                      className="flex items-center px-4 py-2 text-sm text-white hover:bg-gray-700 transition-colors"
                       onClick={() => setShowAccountDropdown(false)}
                     >
                       <FiHelpCircle className="h-4 w-4 mr-2" />
@@ -426,7 +479,7 @@ const Navbar = () => {
           </div>
 
           {isAuthenticated && userDetails?.role === 'admin' && (
-            <Link href="/admin/dashboard" className="text-black">
+            <Link href="/admin/dashboard" className="text-white">
               <FiGrid className="h-5 w-5" />
             </Link>
           )}
@@ -436,17 +489,24 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <div 
         ref={mobileMenuRef}
-        className={`md:hidden fixed inset-y-0 left-0 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-64 bg-white shadow-lg z-50 transition-transform duration-300 ease-in-out`}
+        className={`md:hidden fixed inset-y-0 left-0 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-64 bg-gray-800 shadow-lg z-50 transition-transform duration-300 ease-in-out`}
       >
-        <div className="p-4 border-b">
-          <h3 className="text-lg font-semibold text-black">Menu</h3>
+        <div className="p-4 border-b border-gray-700">
+          <h3 className="text-lg font-semibold text-white">Menu</h3>
         </div>
         <div className="overflow-y-auto h-full">
+          <Link 
+            href="/" 
+            className="block px-4 py-3 hover:bg-gray-700 text-white border-b border-gray-700"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <FiHome className="inline mr-2" /> Home
+          </Link>
           {categories.map((category) => (
-            <div key={category._id} className="border-b">
+            <div key={category._id} className="border-b border-gray-700">
               <Link 
                 href={`/Category/${category.slug}`} 
-                className="block px-4 py-3 hover:bg-gray-50 text-gray-800"
+                className="block px-4 py-3 hover:bg-gray-700 text-white"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {category.name}
@@ -457,7 +517,7 @@ const Navbar = () => {
                     <Link
                       key={subcategory._id}
                       href={`/Category/${subcategory.slug}`}
-                      className="block px-4 py-2 hover:bg-gray-50 text-sm text-gray-800"
+                      className="block px-4 py-2 hover:bg-gray-700 text-sm text-white"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {subcategory.name}
@@ -467,31 +527,76 @@ const Navbar = () => {
               )}
             </div>
           ))}
-          {/* Mobile Authentication Buttons */}
-          {!isAuthenticated && (
-            <div className="p-4 border-t">
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  openAuthModal("login");
-                }}
-                className="w-full mb-2 flex items-center justify-center px-4 py-2 text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50"
-              >
-                <FiLogIn className="h-4 w-4 mr-2" />
-                Login
-              </button>
-              <button
-                onClick={() => {
-                  setIsMobileMenuOpen(false);
-                  openAuthModal("signup");
-                }}
-                className="w-full flex items-center justify-center px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-700"
-              >
-                <FiUserPlus className="h-4 w-4 mr-2" />
-                Sign Up
-              </button>
-            </div>
-          )}
+          {/* Mobile Account Dropdown */}
+          <div className="p-4 border-t border-gray-700">
+            {isAuthenticated ? (
+              <>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setShowAccountModal(true);
+                  }}
+                  className="w-full mb-2 flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
+                >
+                  <FiUser className="h-4 w-4 mr-2" />
+                  My Account
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setShowOrdersModal(true);
+                  }}
+                  className="w-full mb-2 flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
+                >
+                  <FiPackage className="h-4 w-4 mr-2" />
+                  My Orders
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    setShowSettingsModal(true);
+                  }}
+                  className="w-full mb-2 flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
+                >
+                  <FiSettings className="h-4 w-4 mr-2" />
+                  Settings
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleLogout();
+                  }}
+                  className="w-full flex items-center px-4 py-2 text-white hover:bg-gray-700 rounded-lg"
+                >
+                  <FiLogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openAuthModal("login");
+                  }}
+                  className="w-full mb-2 flex items-center justify-center px-4 py-2 text-white border border-gray-600 rounded-lg hover:bg-gray-700"
+                >
+                  <FiLogIn className="h-4 w-4 mr-2" />
+                  Login
+                </button>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openAuthModal("signup");
+                  }}
+                  className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  <FiUserPlus className="h-4 w-4 mr-2" />
+                  Sign Up
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
 

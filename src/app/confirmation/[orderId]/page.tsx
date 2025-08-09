@@ -1,29 +1,24 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useRef,use } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
 import { motion } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment } from '@react-three/drei';
-import * as THREE from 'three';
 
 interface OrderDetails {
   orderId: string;
- 
   items: Array<{
     name: string;
     quantity: number;
     price: number;
     imageUrl?: string;
-    
     colors?: string[];
   }>;
   total: number;
   shipping: {
     fullname: string;
-    Streetaddress:string;
+    Streetaddress: string;
     State_Province: string;
     City: string;
     state: string;
@@ -33,29 +28,8 @@ interface OrderDetails {
   estimatedDelivery?: string;
 }
 
-function ProductModel({ imageUrl }: { imageUrl?: string }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y += 0.005;
-    }
-  });
-
-  return (
-    <mesh ref={meshRef}>
-      <boxGeometry args={[2, 2, 2]} />
-      <meshStandardMaterial 
-        color="#ffffff" 
-        map={imageUrl ? new THREE.TextureLoader().load(imageUrl) : undefined}
-      />
-    </mesh>
-  );
-}
-
-const OrderConfirmation = ({ params }: { params: Promise<{ orderId: string }> }) => {
+const OrderConfirmation = ({ params }: { params: { orderId: string } }) => {
   const router = useRouter();
-  //@ts-ignore
   const { orderId } = params;
   const [order, setOrder] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -65,7 +39,7 @@ const OrderConfirmation = ({ params }: { params: Promise<{ orderId: string }> })
     if (orderId) {
       const fetchOrder = async () => {
         try {
-          const response = await axios.get(`${process.env.ORDER_SERVICE_URL}/api/order/${orderId}`);
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_ORDER_SERVICE_URL}/api/order/${orderId}`);
           if (response.data.success) {
             setOrder(response.data.order);
           } else {
@@ -126,7 +100,7 @@ const OrderConfirmation = ({ params }: { params: Promise<{ orderId: string }> })
         <title>Order Confirmation - {order.orderId}</title>
       </Head>
 
-      {/* Everlane-style header */}
+      {/* Header */}
       <header className="border-b border-gray-200 py-4">
         <div className="container mx-auto px-4 flex justify-center">
           <h1 className="text-2xl font-bold">Shopping Website</h1>
@@ -144,7 +118,7 @@ const OrderConfirmation = ({ params }: { params: Promise<{ orderId: string }> })
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Order Summary with 3D effect */}
+          {/* Order Summary */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -163,17 +137,19 @@ const OrderConfirmation = ({ params }: { params: Promise<{ orderId: string }> })
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-24 h-24 bg-gray-100 rounded-lg overflow-hidden relative">
-                      <Canvas>
-                        <ambientLight intensity={0.5} />
-                        <spotLight position={[20, 20, 20]} angle={0.15} penumbra={1} />
-                        <ProductModel imageUrl={item.imageUrl} />
-                        <Environment preset="city" />
-                        <OrbitControls 
-                          enableZoom={false}
-                          autoRotate
-                          autoRotateSpeed={2}
+                      {item.imageUrl ? (
+                        <img 
+                          src={item.imageUrl} 
+                          alt={item.name}
+                          className="w-full h-full object-cover"
                         />
-                      </Canvas>
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <h3 className="font-medium">{item.name}</h3>
@@ -270,10 +246,10 @@ const OrderConfirmation = ({ params }: { params: Promise<{ orderId: string }> })
         </motion.div>
       </main>
 
-      {/* Everlane-style footer */}
+      {/* Footer */}
       <footer className="border-t border-gray-200 py-8 mt-16">
         <div className="container mx-auto px-4 text-center text-gray-600 text-sm">
-          <p>© {new Date().getFullYear()} EERLANE. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Shopping Website. All rights reserved.</p>
         </div>
       </footer>
     </motion.div>
