@@ -55,7 +55,8 @@ function ProductModel({ imageUrl }: { imageUrl?: string }) {
 
 const OrderConfirmation = ({ params }: { params: Promise<{ orderId: string }> }) => {
   const router = useRouter();
-  const { orderId } = use(params);
+  //@ts-ignore
+  const { orderId } = params;
   const [order, setOrder] = useState<OrderDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

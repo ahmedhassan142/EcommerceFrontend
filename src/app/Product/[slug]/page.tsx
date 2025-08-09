@@ -288,17 +288,22 @@ const handleVoteError = (responseData: VoteResponse) => {
       {/* Product Details */}
       <div className="product-details flex flex-col md:flex-row gap-8">
         {/* Product Image */}
-        <div className="product-image md:w-1/2">
-          <Image
-            src={product.imageUrl}
-            alt={product.name}
-            width={600}
-            height={600}
-            layout="responsive"
-            className="rounded-lg"
-            priority
-          />
-        </div>
+       <div className="product-images md:w-1/2">
+  <div className="grid grid-cols-4 gap-4 md:grid-cols-2 md:grid-rows-2">
+    {/* Main Image */}
+    <div className="col-span-4 md:col-span-2 md:row-span-2">
+      <Image
+        src={product.imageUrl}
+        alt={product.name}
+        width={600}
+        height={600}
+        layout="responsive"
+        className="rounded-lg"
+        priority
+      />
+    </div>
+    </div>
+    </div>
 
         {/* Product Info */}
         <div className="product-info md:w-1/2">

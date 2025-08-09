@@ -30,7 +30,6 @@ import OrdersModal from "./OrderModal";
 import MyAccountModal from "./Accountmodal";
 import { useProfile } from "../context/profileContext";
 
-
 interface ApiCategory {
   _id: string;
   name: string;
@@ -148,7 +147,7 @@ const Navbar = () => {
     if (type === 'Product') {
       router.push(`/Product/${slug}`);
     } else {
-      router.push(`/category/${slug}`);
+      router.push(`/Category/${slug}`);
     }
     setShowSearch(false);
     setSearchQuery("");
@@ -177,24 +176,61 @@ const Navbar = () => {
 
   return (
     <nav className="navbar bg-white shadow-sm sticky top-0 z-50">
+      {/* Mobile Search Bar - appears below navbar when active */}
+      {showSearch && (
+        <div className="md:hidden w-full bg-white p-4 border-t border-gray-200">
+          <form onSubmit={handleSearch} className="relative w-full">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+              autoFocus
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setShowSearch(false);
+                setSearchQuery("");
+              }}
+              className="absolute right-12 top-3.5 text-gray-500 hover:text-gray-700"
+            >
+              <FiX size={20} />
+            </button>
+            <button
+              type="submit"
+              className="absolute right-3 top-3 text-blue-500"
+            >
+              <FiSearch size={20} />
+            </button>
+          </form>
+        </div>
+      )}
+
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-white">
-         SHOPPING WEBSITE
+        <Link href="/" className="text-xl font-bold text-black">
+          SHOPPING WEBSITE
         </Link>
 
         {/* Mobile Menu Toggle */}
-        <button 
-          className="md:hidden p-2"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <FiMenu className="h-6 w-6 text-white" />
-        </button>
-        <Link href="/" className="text-md  text-white">
-          HOME
-        </Link>
-        
+        <div className="flex items-center md:hidden space-x-4">
+          <button 
+            className="p-2"
+            onClick={() => setShowSearch(!showSearch)}
+            aria-label="Search"
+          >
+            <FiSearch className="h-6 w-6 text-black" />
+          </button>
+          <button 
+            className="p-2"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <FiMenu className="h-6 w-6 text-black" />
+          </button>
+        </div>
 
         {/* Navigation Links - Categories (Desktop) */}
         <div className="hidden md:flex items-center space-x-6">
@@ -202,7 +238,7 @@ const Navbar = () => {
             <div key={category._id} className="dropdown group relative">
               <Link 
                 href={`/Category/${category.slug}`} 
-                className="nav-link px-3 py-2 text-white hover:text-blue-600"
+                className="nav-link px-3 py-2 text-black hover:text-blue-600"
               >
                 {category.name}
               </Link>
@@ -225,8 +261,8 @@ const Navbar = () => {
         </div>
 
         {/* Right side elements */}
-        <div className="flex items-center space-x-4">
-          {/* Search Bar */}
+        <div className="hidden md:flex items-center space-x-4">
+          {/* Desktop Search Bar */}
           <div className="relative" ref={searchRef}>
             {showSearch ? (
               <form onSubmit={handleSearch} className="relative">
@@ -235,7 +271,7 @@ const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products..."
-                  className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
+                  className="w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                   autoFocus
                 />
                 <button
@@ -302,7 +338,7 @@ const Navbar = () => {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowSearch(true)}
-                className="hover:bg-gray-100 text-white"
+                className="hover:bg-gray-100 text-black"
               >
                 <FiSearch className="h-5 w-5" />
               </Button>
@@ -313,7 +349,7 @@ const Navbar = () => {
           <div className="relative" ref={accountRef}>
             <button
               onClick={() => setShowAccountDropdown(!showAccountDropdown)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors text-white"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors text-black"
               aria-label="Account menu"
             >
               <FiUser className="h-5 w-5" />
@@ -327,38 +363,24 @@ const Navbar = () => {
                       Hi, {userDetails?.firstName || 'User'}
                     </div>
                     <button
-                  onClick={() => {
-                  //  setShowAccountDropdown(false);
-                    setShowAccountModal(true);
-                          }}
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
-                      >
-                    <FiUser className="h-4 w-4 mr-2" />
+                      onClick={() => {
+                        setShowAccountModal(true);
+                      }}
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                    >
+                      <FiUser className="h-4 w-4 mr-2" />
                       My Account
-                      </button>
- 
-                     {/* <button
-                     onClick={() => {
-                       setShowAccountDropdown(false);
-                       setShowWishlistModal(true);
-                                      }}
-                  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
-                     >
-               <FiHeart className="h-4 w-4 mr-2" />
-                       Wishlist
-                     </button> */}
-                  
-                                     <button
-                     onClick={() => {
-                  // setShowAccountDropdown(false);
-                  setShowOrdersModal(true);
-                         }}
-  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
->
-  <FiPackage className="h-4 w-4 mr-2" />
-  My Orders
-</button>
-                        <button
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowOrdersModal(true);
+                      }}
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
+                    >
+                      <FiPackage className="h-4 w-4 mr-2" />
+                      My Orders
+                    </button>
+                    <button
                       onClick={() => setShowSettingsModal(true)}
                       className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors w-full text-left"
                     >
@@ -403,22 +425,11 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Cart Button */}
-          {/* <button
-            onClick={() => setIsCartOpen(true)}
-            className="relative p-2 hover:bg-gray-100 rounded-full transition-colors text-white"
-            aria-label="Shopping cart"
-          >
-            <FiShoppingCart className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              3
-            </span>
-          </button> */}
-           {isAuthenticated && userDetails?.role === 'admin' && (
-  <Link href="/admin/dashboard" className="text-md text-white">
-    <FiGrid className="h-5 w-5" />
-  </Link>
-)}
+          {isAuthenticated && userDetails?.role === 'admin' && (
+            <Link href="/admin/dashboard" className="text-black">
+              <FiGrid className="h-5 w-5" />
+            </Link>
+          )}
         </div>
       </div>
 
@@ -428,7 +439,7 @@ const Navbar = () => {
         className={`md:hidden fixed inset-y-0 left-0 transform ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} w-64 bg-white shadow-lg z-50 transition-transform duration-300 ease-in-out`}
       >
         <div className="p-4 border-b">
-          <h3 className="text-lg font-semibold text-white">Menu</h3>
+          <h3 className="text-lg font-semibold text-black">Menu</h3>
         </div>
         <div className="overflow-y-auto h-full">
           {categories.map((category) => (
@@ -501,10 +512,8 @@ const Navbar = () => {
           initialMode={authType}
         />
       )}
-      
       {showOrdersModal && <OrdersModal onClose={() => setShowOrdersModal(false)} />}
-       
-        {showAccountModal && <MyAccountModal onClose={() => setShowAccountModal(false)} />}
+      {showAccountModal && <MyAccountModal onClose={() => setShowAccountModal(false)} />}
     </nav>
   );
 };
